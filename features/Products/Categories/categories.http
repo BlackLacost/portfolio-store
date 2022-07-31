@@ -1,0 +1,12 @@
+@baseUrl = http://localhost:3000/api/categories
+
+### Получить все категории
+GET {{baseUrl}}
+
+### Создать новую категорию
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+	"name": "Смартфоны"
+}
