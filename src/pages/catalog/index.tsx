@@ -3,7 +3,7 @@ import { Category } from '@prisma/client'
 import type { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
-import { prisma } from '../../prisma'
+import { prisma } from '../../../prisma'
 
 type Props = {
   categories: Category[]

@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { slugify } from 'transliteration'
 import { ValidationError } from 'yup'
+import { prisma } from '../../../prisma'
 import { createCategorySchema } from '../../features/Products/Categories/create-category.schema'
-import { prisma } from '../../prisma'
 
 export default async function handler(
   req: NextApiRequest,
