@@ -20,10 +20,3 @@ const AdminPage: NextPage<Props> = (props) => {
 }
 
 export default AdminPage
-
-const Form = styled('form')({
-  display: 'flex',
-  flexDirection: 'column',
-  padding: 20,
-  gap: 20,
-})
