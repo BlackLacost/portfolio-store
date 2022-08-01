@@ -5,7 +5,6 @@ import {
   Paper,
   Snackbar,
   Stack,
-  TextField,
   Typography,
 } from '@mui/material'
 import { styled } from '@mui/system'
@@ -13,7 +12,8 @@ import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { NextPage } from 'next'
 import { useState } from 'react'
-import { Controller, FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
+import TextInput from '../components/TextInput'
 import { createCategorySchema } from '../features/Products/Categories/create-category.schema'
 
 type Props = {}
@@ -56,18 +56,7 @@ const AdminPage: NextPage<Props> = (props) => {
               <Typography variant="h2" component="h2">
                 Создать категорию
               </Typography>
-              <Controller
-                name="name"
-                render={({ field, fieldState: { error } }) => (
-                  <TextField
-                    required
-                    {...field}
-                    helperText={error?.message}
-                    error={Boolean(error)}
-                    label="Название товара"
-                  />
-                )}
-              />
+              <TextInput required label="Название товара" name="name" />
               <Button
                 type="submit"
                 onClick={handleSubmit(onSubmit)}
