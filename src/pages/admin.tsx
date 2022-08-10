@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { NextPage } from 'next'
 import CreateCategoryForm from '../features/Products/Categories/CreateCategoryForm'
 
@@ -11,9 +11,7 @@ const AdminPage: NextPage<Props> = (props) => {
         <Typography variant="h1" component="h1">
           Админка
         </Typography>
-        <Paper>
-          <CreateCategoryForm />
-        </Paper>
+        <CreateCategoryForm />
       </Stack>
     </>
   )

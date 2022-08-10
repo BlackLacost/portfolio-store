@@ -1,9 +1,10 @@
-import { Card, CardContent, Grid, Stack, Typography } from '@mui/material'
+import { Grid, Stack, Typography } from '@mui/material'
 import { Category } from '@prisma/client'
 import type { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
 import { prisma } from '../../../prisma'
+import CardCategory from '../../features/Products/Categories/CardCategory'
 
 type Props = {
   categories: Category[]
@@ -27,15 +28,8 @@ const CatalogPage: NextPage<Props> = ({ categories }) => {
         <Grid container spacing={2}>
           {categories.map((category) => (
             <Fragment key={category.id}>
-              <Grid item md={6}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h4" component="h2">
-                      {category.name}
-                    </Typography>
-                    <Typography>{category.slug}</Typography>
-                  </CardContent>
-                </Card>
+              <Grid item xs={12} sm={6} md={4}>
+                <CardCategory category={category} />
               </Grid>
             </Fragment>
           ))}

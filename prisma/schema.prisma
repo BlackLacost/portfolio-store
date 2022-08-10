@@ -8,7 +8,8 @@ datasource db {
 }
 
 model Category {
-  id   String @id @default(cuid())
-  name String @unique @db.VarChar(50)
-  slug String @unique @db.VarChar(50)
+  id    String @id @default(cuid())
+  name  String @unique @db.VarChar(50)
+  slug  String @unique @db.VarChar(50)
+  image String @unique
 }

@@ -1,32 +1,43 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Alert, Button, Snackbar, Typography } from '@mui/material'
+import { Alert, Button, Paper, Snackbar, Typography } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import FileUpload from '../../../components/FileUpload'
 import { Form } from '../../../components/Form'
 import TextInput from '../../../components/TextInput'
-import { createCategorySchema } from './create-category.schema'
+import {
+  createCategorySchema,
+  CreateCategoryType,
+} from './create-category.schema'
 
 type Props = {}
 
 const CreateCategoryForm = ({}: Props) => {
   const [open, setOpen] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
-  const mutation = useMutation(async (formData) => {
-    return axios.post('/api/categories', formData)
+
+  const mutation = useMutation(async (formData: CreateCategoryType) => {
+    return axios.post('/api/categories', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
   })
 
-  const categoryMethods = useForm({
+  const categoryMethods = useForm<CreateCategoryType>({
     defaultValues: {
       name: '',
+      image: [],
     },
     resolver: yupResolver(createCategorySchema),
+    mode: 'onBlur',
   })
 
   const { handleSubmit, reset } = categoryMethods
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: CreateCategoryType) => {
     setOpen(true)
     try {
       await mutation.mutateAsync(data)
@@ -38,22 +49,29 @@ const CreateCategoryForm = ({}: Props) => {
 
   return (
     <>
-      <FormProvider {...categoryMethods}>
-        <Form noValidate>
-          <Typography variant="h2" component="h2">
-            Создать категорию
-          </Typography>
-          <TextInput required label="Название товара" name="name" />
-          <Button
-            type="submit"
-            onClick={handleSubmit(onSubmit)}
-            disabled={mutation.isLoading}
-            sx={{ alignSelf: 'end' }}
-          >
-            Создать
-          </Button>
-        </Form>
-      </FormProvider>
+      <Paper>
+        <FormProvider {...categoryMethods}>
+          <Form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <Typography variant="h2" component="h2">
+              Создать категорию
+            </Typography>
+            <TextInput required label="Название товара" name="name" />
+            <FileUpload
+              label="Перенесите картинку сюда или нажмите, чтобы выбрать файл"
+              name="image"
+              accept={{ 'image/*': [] }}
+            />
+
+            <Button
+              type="submit"
+              disabled={mutation.isLoading}
+              sx={{ alignSelf: 'end' }}
+            >
+              Создать
+            </Button>
+          </Form>
+        </FormProvider>
+      </Paper>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={open}
@@ -64,9 +82,10 @@ const CreateCategoryForm = ({}: Props) => {
           <Alert severity="info">Loading</Alert>
         ) : mutation.isError ? (
           <Alert severity="error">
-            {errors.map((error) => (
-              <Typography key={error}>{error}</Typography>
-            ))}
+            {errors.length &&
+              errors.map((error) => (
+                <Typography key={error}>{error}</Typography>
+              ))}
           </Alert>
         ) : (
           <Alert severity="success">Success</Alert>

@@ -1,0 +1,20 @@
+@baseUrl = http://localhost:3000/api/categories
+
+### Получить все категории
+GET {{baseUrl}}
+
+###
+POST {{baseUrl}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="name"
+
+Холодильники2
+--boundary
+Content-Disposition: form-data; name="image"; filename="phone1.webp"
+Content-Type: image/*
+
+< /home/blacklacost/Downloads/phone1.webp
+--boundary--
+###

@@ -12,10 +12,10 @@ export default function TextInput({
       render={({ field, fieldState: { error } }) => (
         <TextField
           {...field}
-          {...props}
           helperText={error?.message}
           error={Boolean(error)}
           label={label}
+          {...props}
         />
       )}
     />

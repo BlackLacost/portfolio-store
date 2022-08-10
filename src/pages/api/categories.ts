@@ -3,6 +3,14 @@ import { slugify } from 'transliteration'
 import { ValidationError } from 'yup'
 import { prisma } from '../../../prisma'
 import { createCategorySchema } from '../../features/Products/Categories/create-category.schema'
+import { upload } from '../../utils/cloudinary.services'
+import { parseForm } from '../../utils/formidable'
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,7 +23,12 @@ export default async function handler(
     }
 
     if (req.method === 'POST') {
-      const { name } = await createCategorySchema.validate(req.body)
+      const { files, fields } = await parseForm(req)
+      const { name, image } = await createCategorySchema.validate({
+        name: fields.name[0],
+        image: files.image,
+      })
+      const imageUrl = await upload(image[0].filepath)
 
       const existingCategory = await prisma.category.findUnique({
         where: { name },
@@ -27,7 +40,7 @@ export default async function handler(
       }
 
       const category = await prisma.category.create({
-        data: { name, slug: slugify(name) },
+        data: { name, slug: slugify(name), image: imageUrl },
       })
       return res.status(201).json(category)
     }
